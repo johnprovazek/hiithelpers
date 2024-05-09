@@ -16,12 +16,13 @@ python ./hiithelpers.py
 
 ## Credits
 
-[KidPix 2 Sounds](https://www.dropbox.com/sh/42lbwv1qfyp7ox2/AABtBgnW36HJba6T8R70SvJXa?dl=0) were used in the application.
+Sounds from [KidPix 2](https://www.dropbox.com/sh/42lbwv1qfyp7ox2/AABtBgnW36HJba6T8R70SvJXa?dl=0) were used in this application.
 
 ## Bugs & Improvements
 
-- Film trainer exercises and add them into the application.
-- Update the exercise buttons with better designs based on the trainer exercises.
-- In the countdown() function the time will be off by around 1 millisecond each time. Consider Fixing this.
-- Add some colored dots around the application where possible, for more "style".
+- Current images in the application are placeholders. Need to film and create frames for the trainers with [EbSynth](https://www.youtube.com/watch?v=tq_KOmXyVDo&ab_channel=JoelHaver).
+- Add sounds for each trainer.
+- Create an executable for this program.
+- Further investigate a way to load the frames in parallel while the application is running.
+- The countdown_loop function counting is off by milliseconds for each exercise.
 - Use a linter and a style guide.
