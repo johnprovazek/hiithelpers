@@ -44,7 +44,7 @@ def load_canvas_images():
     trainer_name = trainer_names[trainer_index]
     loop_index = int(adjusted_frame_index / num_frames)
     frame_index = int(adjusted_frame_index % num_frames)
-    trainer_canvas_frames[i] = tk.PhotoImage(file="./images/trainer/" + trainer_name + "/canvas/" + str(loop_index) + "_" + str(frame_index) + ".png")
+    trainer_canvas_frames[i] = tk.PhotoImage(file=path("\\images\\trainer\\" + trainer_name + "\\canvas\\" + str(loop_index) + "_" + str(frame_index) + ".png"))
   window.after(300, splash_page, "remove")
 
 # Handles navigating backwards in game states.
@@ -101,6 +101,8 @@ def trainer_select(action):
     for i in range(len(trainer_names)):
       trainer_buttons[i].place(x=540, y=i_y, height=60, width=360, anchor="s")
       i_y = i_y + 60
+    audio_index = trainer_audio[selected_trainer]["index"]
+    play(trainer_audio[selected_trainer]["sounds"][audio_index])
   elif action == "remove":
     next_button.place_forget()
   else:
@@ -346,9 +348,9 @@ def toggle_trainer(trainer_name):
           trainer_buttons[i].config(image=selected_trainer_button_images[i])
         else:
           trainer_buttons[i].config(image=default_trainer_button_images[i])
-      play(trainer_audio)
-    else:
-      play(trainer2_audio)
+    new_index = (trainer_audio[selected_trainer]["index"] + 1) % num_trainer_sounds
+    trainer_audio[selected_trainer]["index"] = new_index
+    play(trainer_audio[selected_trainer]["sounds"][new_index])
   else:
     messagebox.showerror("hiithelpers application error", "toggle_trainer called with an invalid trainer. Closing application.", command=window.destroy())
 
@@ -374,12 +376,21 @@ def handle_scale_slide(value, scale):
 def kill_app():
   os._exit(1)
 
+# Returns absolute path for files. Needed for building application as an executable through nuitka.
+def path(relative_path):
+  return root_dir + relative_path
+
+# File Setup.
+root_dir = os.path.dirname(__file__) # Absolute path of the directory for this file.
+
 # Window Setup.
 window = tk.Tk() # Initializing tkinter window.
 window.geometry("720x480") # Setting window height and width.
 window.resizable(False, False) # Disabling resizing the window.
 window.configure(bg="#FFFFFF") # Configuring the window background color.
 window.protocol('WM_DELETE_WINDOW', kill_app) # Overriding the GUI exit button function.
+window.title("hiithelpers") # Overriding the tkinter window title.
+window.iconbitmap(path("\\images\\hh.ico"))
 
 # Game Fonts.
 comic_sans_large = ("Comic Sans MS", 40, "bold") # Large font used in main heading.
@@ -391,21 +402,42 @@ pygame.mixer.init() # Initializing pygame mixer.
 pygame.mixer.set_num_channels(3) # Setting up three audio channels.
 audio_on = False # Boolean value to maintain if application volume is muted.
 scale_last_tick_time = time.time() # Timestamp used to limit the slider audio from playing too often.
-mute_audio = pygame.mixer.Sound("./sounds/mute.wav") # Muting application sound.
-unmute_audio = pygame.mixer.Sound("./sounds/unmute.wav") # Unmuting application sound.
-trainer_audio = pygame.mixer.Sound("./sounds/trainer.wav") # Changing trainer sound.
-trainer2_audio = pygame.mixer.Sound("./sounds/trainer2.wav") # Trainer has already been selected sound.
-click_audio = pygame.mixer.Sound("./sounds/click.wav") # Button click sound.
-pop_audio = pygame.mixer.Sound("./sounds/pop.wav") # Adding an exercise sound.
-unpop_audio = pygame.mixer.Sound("./sounds/unpop.wav") # Removing an exercise sound.
-tick_audio = pygame.mixer.Sound("./sounds/tick.wav") # Rest and exercise scale slider sound.
-start_audio = pygame.mixer.Sound("./sounds/start.wav") # Prompt user exercises are starting sound.
-rest_audio = pygame.mixer.Sound("./sounds/rest.wav") # Prompts user to rest sound.
-countdown_audio = pygame.mixer.Sound("./sounds/countdown.wav") # Countdown sound between exercise and rest periods.
-wow_audio = pygame.mixer.Sound("./sounds/wow.wav") # Easter Egg sound only played first time all exercises are selected.
+mute_audio = pygame.mixer.Sound(path("\\sounds\\mute.wav")) # Muting application sound.
+unmute_audio = pygame.mixer.Sound(path("\\sounds\\unmute.wav")) # Unmuting application sound.
+click_audio = pygame.mixer.Sound(path("\\sounds\\click.wav")) # Button click sound.
+pop_audio = pygame.mixer.Sound(path("\\sounds\\pop.wav")) # Adding an exercise sound.
+unpop_audio = pygame.mixer.Sound(path("\\sounds\\unpop.wav")) # Removing an exercise sound.
+tick_audio = pygame.mixer.Sound(path("\\sounds\\tick.wav")) # Rest and exercise scale slider sound.
+start_audio = pygame.mixer.Sound(path("\\sounds\\start.wav")) # Prompt user exercises are starting sound.
+rest_audio = pygame.mixer.Sound(path("\\sounds\\rest.wav")) # Prompts user to rest sound.
+countdown_audio = pygame.mixer.Sound(path("\\sounds\\countdown.wav")) # Countdown sound between exercise and rest periods.
+wow_audio = pygame.mixer.Sound(path("\\sounds\\wow.wav")) # Easter Egg sound only played first time all exercises are selected.
 wow_easter_egg = True
-error_audio = pygame.mixer.Sound("./sounds/error.wav") # Error message sound.
+error_audio = pygame.mixer.Sound(path("\\sounds\\error.wav")) # Error message sound.
 error_audio.set_volume(0.35) # Lowering the error audio volume.
+num_trainer_sounds = 5 # The number of selection sounds per each trainer.
+trainer_audio = { # Trainer selection sounds. Contains an index to cycle through the sounds without repeating them.
+  "arnold" : {
+    "sounds": [pygame.mixer.Sound(path("\\sounds\\arnold" + str(i+1) + ".wav")) for i in range(num_trainer_sounds)],
+    "index": random.randint(0,num_trainer_sounds-1)
+  },
+  "rex" : {
+    "sounds" : [pygame.mixer.Sound(path("\\sounds\\rex" + str(i+1) + ".wav")) for i in range(num_trainer_sounds)],
+    "index": random.randint(0,num_trainer_sounds-1)
+  },
+  "shaq" : {
+    "sounds" : [pygame.mixer.Sound(path("\\sounds\\shaq" + str(i+1) + ".wav")) for i in range(num_trainer_sounds)],
+    "index": random.randint(0,num_trainer_sounds-1)
+  },
+  "shrek" : {
+    "sounds" : [pygame.mixer.Sound(path("\\sounds\\shrek" + str(i+1) + ".wav")) for i in range(num_trainer_sounds)],
+    "index": random.randint(0,num_trainer_sounds-1)
+  },
+  "spiderman" : {
+    "sounds" : [pygame.mixer.Sound(path("\\sounds\\spiderman" + str(i+1) + ".wav")) for i in range(num_trainer_sounds)],
+    "index": random.randint(0,num_trainer_sounds-1)
+  },
+}
 
 # Game Colors.
 hiit_blue = "#BAE1FF" # Arnold.
@@ -423,14 +455,14 @@ menu_title = tk.Label(window, text="", font=comic_sans_medium, bg=window["bg"]) 
 trainer_title = tk.Label(window, text="", font=comic_sans_small, bg=window["bg"]) # Trainer heading on the left.
 
 # Navigation Buttons.
-back_button_image = tk.PhotoImage(file="./images/back.png")
+back_button_image = tk.PhotoImage(file=path("\\images\\back.png"))
 back_button = tk.Button(window, image=back_button_image, borderwidth=0, bg=window["bg"], activebackground=window["bg"], command=navigate_back, cursor="hand2")
-next_button_image = tk.PhotoImage(file="./images/next.png")
+next_button_image = tk.PhotoImage(file=path("\\images\\next.png"))
 next_button = tk.Button(window, image=next_button_image, borderwidth=0, bg=window["bg"], activebackground=window["bg"], command=navigate_next, cursor="hand2")
 
 # Audio Buttons.
-mute_image = tk.PhotoImage(file="./images/mute.png")
-volume_image = tk.PhotoImage(file="./images/volume.png")
+mute_image = tk.PhotoImage(file=path("\\images\\mute.png"))
+volume_image = tk.PhotoImage(file=path("\\images\\volume.png"))
 mute_volume_button = tk.Button(window, borderwidth=0, bg=window["bg"], activebackground=window["bg"], command=toggle_mute_volume, cursor="hand2")
 
 # Canvas Loop Setup.
@@ -470,12 +502,12 @@ exercise_names = [
 total_loops = len(exercise_names) + 1
 exercises_selected = []
 exercise_button_images = {
-  "default": [tk.PhotoImage(file="./images/exercise/" + str(i) + ".png") for i in range(25)],
-  "arnold": [tk.PhotoImage(file="./images/trainer/arnold/exercise/" + str(i) + ".png") for i in range(25)],
-  "rex": [tk.PhotoImage(file="./images/trainer/rex/exercise/" + str(i) + ".png") for i in range(25)],
-  "shaq": [tk.PhotoImage(file="./images/trainer/shaq/exercise/" + str(i) + ".png") for i in range(25)],
-  "shrek": [tk.PhotoImage(file="./images/trainer/shrek/exercise/" + str(i) + ".png") for i in range(25)],
-  "spiderman": [tk.PhotoImage(file="./images/trainer/spiderman/exercise/" + str(i) + ".png") for i in range(25)]
+  "default": [tk.PhotoImage(file=path("\\images\\exercise\\" + str(i) + ".png")) for i in range(25)],
+  "arnold": [tk.PhotoImage(file=path("\\images\\trainer\\arnold\\exercise\\" + str(i) + ".png")) for i in range(25)],
+  "rex": [tk.PhotoImage(file=path("\\images\\trainer\\rex\\exercise\\" + str(i) + ".png")) for i in range(25)],
+  "shaq": [tk.PhotoImage(file=path("\\images\\trainer\\shaq\\exercise\\" + str(i) + ".png")) for i in range(25)],
+  "shrek": [tk.PhotoImage(file=path("\\images\\trainer\\shrek\\exercise\\" + str(i) + ".png")) for i in range(25)],
+  "spiderman": [tk.PhotoImage(file=path("\\images\\trainer\\spiderman\\exercise\\" + str(i) + ".png")) for i in range(25)]
 }
 
 # Trainer Setup.
@@ -487,15 +519,15 @@ trainer_canvas_direction = 1
 selected_trainer = ""
 canvas_loop_id = 0
 trainer_names = ["arnold","rex","shaq","shrek","spiderman"]
-loading_image = tk.PhotoImage(file="./images/loading.png")
+loading_image = tk.PhotoImage(file=path("\\images\\loading.png"))
 trainer_canvas_frames = [loading_image] * num_frames * total_loops * len(trainer_names)
 default_trainer_button_images = []
 selected_trainer_button_images = []
 trainer_buttons = []
 for name in trainer_names:
-  default_image = tk.PhotoImage(file="./images/trainer/" + name + "/default.png")
+  default_image = tk.PhotoImage(file=path("\\images\\trainer\\" + name + "\\default.png"))
   default_trainer_button_images.append(default_image)
-  selected_image = tk.PhotoImage(file="./images/trainer/" + name + "/selected.png")
+  selected_image = tk.PhotoImage(file=path("\\images\\trainer\\" + name + "\\selected.png"))
   selected_trainer_button_images.append(selected_image)
   trainer_button = tk.Button(window, image=default_image, borderwidth=0, bg=window["bg"], activebackground=window["bg"], command=lambda name=name: toggle_trainer(name), cursor="hand2")
   trainer_buttons.append(trainer_button)
@@ -519,21 +551,21 @@ for i in range(25):
   exercise_button.place(x=i_x, y=i_y, height=60, width=72, anchor="s")
 
 # Outline image for later game states.
-menu_outline_image = tk.PhotoImage(file="./images/menu_outline.png")
+menu_outline_image = tk.PhotoImage(file=path("\\images\\menu_outline.png"))
 menu_outline_label = tk.Label(window, borderwidth=0)
 
 # Custom Scales Setup (Each trainer has a custom scale).
 custom_ttk_style = ttk.Style(window)
-exercise_trough_image = tk.PhotoImage(master=window, file="./images/exercise_trough.png")
-exercise_slider_image = tk.PhotoImage(master=window, file="./images/exercise_slider.png")
+exercise_trough_image = tk.PhotoImage(master=window, file=path("\\images\\exercise_trough.png"))
+exercise_slider_image = tk.PhotoImage(master=window, file=path("\\images\\exercise_slider.png"))
 custom_ttk_style.element_create("exercise.Scale.trough", "image", exercise_trough_image)
-rest_trough_image = tk.PhotoImage(master=window, file="./images/rest_trough.png")
-rest_slider_image = tk.PhotoImage(master=window, file="./images/rest_slider.png")
+rest_trough_image = tk.PhotoImage(master=window, file=path("\\images\\rest_trough.png"))
+rest_slider_image = tk.PhotoImage(master=window, file=path("\\images\\rest_slider.png"))
 custom_ttk_style.element_create("rest.Scale.trough", "image", rest_trough_image)
 exercise_trainer_slider_images = []
 rest_trainer_slider_images = []
 for i in range(5):
-  exercise_trainer_slider_images.append(tk.PhotoImage(master=window, file="./images/trainer/" +  trainer_names[i] + "/exercise.png"))
+  exercise_trainer_slider_images.append(tk.PhotoImage(master=window, file=path("\\images\\trainer\\" +  trainer_names[i] + "\\exercise.png")))
   custom_ttk_style.element_create( trainer_names[i] + ".exercise.Scale.slider", "image", exercise_slider_image, ('pressed', exercise_trainer_slider_images[i]))
   custom_ttk_style.layout(trainer_names[i] + ".exercise.Horizontal.TScale",
     [("exercise.Scale.trough", {"sticky": "we"}),
@@ -541,7 +573,7 @@ for i in range(5):
       {"side": "left", "sticky": "",
         "children": [("exercise.Horizontal.Scale.label", {"sticky": ""})]
       })])
-  rest_trainer_slider_images.append(tk.PhotoImage(master=window, file="./images/trainer/" +  trainer_names[i] + "/rest.png"))
+  rest_trainer_slider_images.append(tk.PhotoImage(master=window, file=path("\\images\\trainer\\" +  trainer_names[i] + "\\rest.png")))
   custom_ttk_style.element_create( trainer_names[i] + ".rest.Scale.slider", "image", rest_slider_image, ('pressed', rest_trainer_slider_images[i]))
   custom_ttk_style.layout( trainer_names[i] + ".rest.Horizontal.TScale",
     [("rest.Scale.trough", {"sticky": "we"}),
@@ -563,10 +595,10 @@ rest_time_title = tk.Label(window, font=comic_sans_small, bg=window["bg"], text=
 rest_time_scale = ttk.Scale(window, variable = rest_time, from_ = 10, to = 120, orient = "horizontal", command=lambda e: handle_scale_slide(e, "rest"), cursor="hand2")
 
 # Workout Setup.
-pause_button_image = tk.PhotoImage(file="./images/pause.png")
-resume_button_image = tk.PhotoImage(file="./images/resume.png")
-start_button_image = tk.PhotoImage(file="./images/start.png")
-stop_button_image = tk.PhotoImage(file="./images/stop.png")
+pause_button_image = tk.PhotoImage(file=path("\\images\\pause.png"))
+resume_button_image = tk.PhotoImage(file=path("\\images\\resume.png"))
+start_button_image = tk.PhotoImage(file=path("\\images\\start.png"))
+stop_button_image = tk.PhotoImage(file=path("\\images\\stop.png"))
 workout_button = tk.Button(window, font=comic_sans_small, borderwidth=0, activebackground=window["bg"], command=toggle_exercise_start_stop, cursor="hand2")
 workout_interval_title = tk.Label(window, font=comic_sans_small, bg=window["bg"])
 timer_title = tk.Label(window, font=comic_sans_large, bg=window["bg"], fg="black")
@@ -576,7 +608,7 @@ workout_progress_title = tk.Label(window, font=comic_sans_small, bg=window["bg"]
 num_preworkout_memes = 4
 preworkout_images = []
 for i in range(num_preworkout_memes):
-  preworkout_images.append(tk.PhotoImage(file="./images/preworkout/" + str(i+1) + ".png"))
+  preworkout_images.append(tk.PhotoImage(file=path("\\images\\preworkout\\" + str(i+1) + ".png")))
 
 # Workout variables used in countdown_loop.
 workout_status = "" # ("stop","start").
@@ -595,7 +627,7 @@ loading_title = tk.Label(window, text="loading assets...", font=comic_sans_mediu
 loading_bar_label = tk.Label(window, borderwidth=0)
 loading_bar_images = []
 for i in range(11):
-  loading_bar_images.append(tk.PhotoImage(file="./images/loading/" + str(i*10) + ".png"))
+  loading_bar_images.append(tk.PhotoImage(file=path("\\images\\loading\\" + str(i*10) + ".png")))
 
 # Initializing Application.
 game_state = "trainer_select_state"

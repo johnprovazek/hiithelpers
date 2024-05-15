@@ -1,3 +1,5 @@
-images/dev/
-images/trainer/image.py
 dev/
+build/
+dist/
+release/windows/hiithelpers-setup.iss
+hiithelpers.spec
