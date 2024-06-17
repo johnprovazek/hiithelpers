@@ -1,4 +1,4 @@
-dev/
+local-dev/
 build/
 dist/
 release/windows/hiithelpers-setup.iss

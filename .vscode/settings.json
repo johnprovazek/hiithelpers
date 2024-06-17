@@ -1,8 +1,32 @@
 {
+  "prettier.configPath": ".vscode/.prettierrc",
+  "pylint.args": ["--rcfile=.vscode/.pylintrc"],
   "files.exclude": {
-    "dev/": true
+    "local-dev/": true
   },
   "search.exclude": {
-    "dev/": true
-  }
+    "local-dev/": true
+  },
+  "cSpell.words": [
+    "borderwidth",
+    "Burpees",
+    "Chewbacca",
+    "Deadlifts",
+    "distpath",
+    "Flys",
+    "Glute",
+    "highlightthickness",
+    "hiithelpers",
+    "Inno",
+    "johnprovazek",
+    "noconsole",
+    "onefile",
+    "pygame",
+    "pyinstaller",
+    "shaq",
+    "spiderman",
+    "tkinter",
+    "unmute",
+    "unpop"
+  ]
 }
