@@ -2,7 +2,7 @@
 
 ## Description
 
-This application was designed to be used at home for doing high intensity interval training exercises. You can download the application for Windows devices now at [johnprovazek.com/hiithelpers](https://www.johnprovazek.com/hiithelpers/).
+This application was designed to be used at home for doing high intensity interval training exercises.
 
 Developed with Python utilizing the [tkinter](https://docs.python.org/3/library/tkinter.html) package.
 
@@ -10,9 +10,11 @@ Developed with Python utilizing the [tkinter](https://docs.python.org/3/library/
 
 ### Download
 
-If you are using a Windows device you can easily download and install this application at [johnprovazek.com/hiithelpers](https://www.johnprovazek.com/hiithelpers/). If you are using a Mac or Linux device there is not an easy installation process available at this time. To run this application you will need to build the Python application by following the instructions below.
+If you are using a Windows device you can easily download and install this application at [johnprovazek.com/hiithelpers](https://www.johnprovazek.com/hiithelpers/). If you are using a Mac or Linux device there is not an easy installation process available at this time and you will need to build the application from source. If your browser and/or Windows device flags this application as a security risk during the download and install procedure you can also build this application from source instead.
 
-This application was developed using Python version 3.11. To run the application, from the root directory run the following command:
+### Build
+
+This application was developed using Python version 3.11. From the root directory, run the following command to build and run the application:
 
 ```
 python hiithelpers.py
@@ -24,7 +26,7 @@ If you were able to successfully run the Python application from the command lin
 pyinstaller hiithelpers.py --noconsole --add-data "images;images" --add-data "sounds;sounds" --icon=images/hh.ico --onefile --distpath release/windows && rm hiithelpers.spec && rm -rf build
 ```
 
-This command may need to slightly altered for Mac and Linux devices.
+This command may need to be slightly altered for Mac and Linux devices. After running this command your application will be located under the path specified in the _--distpath_ argument.
 
 ## Credits
 
@@ -35,10 +37,8 @@ This [Inno Setup Wizard setup guide](https://www.pythonguis.com/tutorials/packag
 ## Bugs & Improvements
 
 - Current images in the application are placeholders. Need to film and create frames for the trainers with [EbSynth](https://www.youtube.com/watch?v=tq_KOmXyVDo&ab_channel=JoelHaver).
-- Add sounds for each trainer.
-- Remove Shaq and add Chewbacca.
-- Balance the volume on all the applications sounds.
+- Consider adding logic to keep trainer sounds from playing over each other.
 - Investigate why the application has issues moving the window while the frames are loading.
 - Investigate a way to load the frames in parallel while the application is running.
+- Investigate if there is a way to get this application to not show up as a security risk on browsers and operating systems.
 - The countdown_loop function counting is off by milliseconds for each exercise.
-- Use a linter and a style guide.

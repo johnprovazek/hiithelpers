@@ -341,7 +341,7 @@ def countdown_loop():
             exercises_complete = str(countdown_exercises_len - len(countdown_exercises))
             progress_string = "(" + exercises_complete + "/" + str(countdown_exercises_len) + ")"
             workout_progress_title.config(text=progress_string)
-            play("start")
+            play(t_selected + "_start")
         # Rest stage just started.
         elif countdown_stage == "Rest" and countdown_timer == rest_time_int:
             if len(countdown_exercises) != 0:
@@ -349,7 +349,7 @@ def countdown_loop():
             trainer_title.config(text=exercises[countdown_exercise])
             t_canvas_loop_id = t_canvas_loop_id + 1
             canvas_loop(t_canvas_loop_id, countdown_exercise + 1)
-            play("rest")
+            play(t_selected + "_rest")
         # Get Ready stage just started.
         elif countdown_stage == "Get Ready" and countdown_timer == countdown_init_time:
             if len(countdown_exercises) != 0:
@@ -511,7 +511,7 @@ sound_easter_egg = True  # Used to only play the easter egg sound once.
 game_state = ""  # Keeps track of current game state.
 
 # Trainer Setup.
-t_names = ["arnold", "rex", "shaq", "shrek", "spiderman"]  # List of all trainers.
+t_names = ["arnold", "rex", "chewbacca", "shrek", "spiderman"]  # List of all trainers.
 t_selected = ""  # Keeps track of the trainer selected.
 t_sounds_count = 5  # Number of trainer selection sounds per trainer.
 t_sounds_i = {}  # Index for trainer selection sounds so trainer sounds won't repeat.
