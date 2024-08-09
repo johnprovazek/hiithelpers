@@ -4,7 +4,13 @@
 
 This application was designed to be used at home for doing high intensity interval training exercises.
 
-Developed with Python utilizing the [tkinter](https://docs.python.org/3/library/tkinter.html) package.
+Built using Python utilizing the [tkinter](https://docs.python.org/3/library/tkinter.html) package.
+
+<div align="center">
+  <picture>
+    <img src="https://github.com/user-attachments/assets/004c65b3-5cf0-4f23-a40a-f518cdd49401" width="830px">
+  </picture>
+</div>
 
 ## Installation
 
