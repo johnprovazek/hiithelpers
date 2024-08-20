@@ -8,7 +8,7 @@ Built using Python utilizing the [tkinter](https://docs.python.org/3/library/tki
 
 <div align="center">
   <picture>
-    <img src="https://github.com/user-attachments/assets/004c65b3-5cf0-4f23-a40a-f518cdd49401" width="830px">
+    <img src="https://repository-images.githubusercontent.com/627113986/87fe84e4-acd4-4bb4-a86d-a94794c575d3" width="830px">
   </picture>
 </div>
 
